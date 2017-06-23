@@ -9,7 +9,6 @@ import com.ben.boonya.architecturecomponentdemo.model.Character
  */
 class CharacterListViewModel : ViewModel() {
     private val repository = CharacterListRepository()
-    var characterList: List<Character> = ArrayList()
 
     val isLoading = MediatorLiveData<Boolean>()
 
@@ -25,8 +24,8 @@ class CharacterListViewModel : ViewModel() {
         characterResponse.addSource(repository.characterListResponse)
         {
             it?.first?.characters?.let {
-                characterList = characterList.plus(it)
-                characterResponse.value = characterList
+                val characterList = characterResponse.value
+                characterResponse.value = characterList?.plus(it) ?: it
             }
 
         }

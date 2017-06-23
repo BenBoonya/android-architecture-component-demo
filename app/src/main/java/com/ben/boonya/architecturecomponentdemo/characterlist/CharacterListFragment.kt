@@ -37,11 +37,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner {
         val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = linearLayoutManager
-        rvCharacter.addOnScrollListener(object : EndlessRecyclerOnScrollListener(linearLayoutManager) {
-            override fun onLoadMore(currentPage: Int) {
-                viewmodel.getCharacterByPage(currentPage)
-            }
-        })
+        rvCharacter.addOnScrollListener(EndlessRecyclerOnScrollListener(linearLayoutManager) { currentPage -> viewmodel.getCharacterByPage(currentPage)})
         viewmodel.getCharacterByPage(1)
         attachObserver()
     }
