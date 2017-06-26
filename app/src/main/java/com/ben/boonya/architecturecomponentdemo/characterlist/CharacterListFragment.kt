@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +19,10 @@ import kotlinx.android.synthetic.main.fragment_character_list.*
 /**
  * Created by oozou on 6/21/2017 AD.
  */
-class CharacterListFragment : Fragment(), LifecycleRegistryOwner {
+class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var viewmodel: CharacterListViewModel
     private lateinit var characterListAdapter: CharacterListAdapter
+    private lateinit var onScrollListener: EndlessRecyclerOnScrollListener
     private val registry = LifecycleRegistry(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,10 +36,16 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         characterListAdapter = CharacterListAdapter(viewmodel)
+
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary)
+
         val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = linearLayoutManager
-        rvCharacter.addOnScrollListener(EndlessRecyclerOnScrollListener(linearLayoutManager) { currentPage -> viewmodel.getCharacterByPage(currentPage)})
+        onScrollListener = EndlessRecyclerOnScrollListener(linearLayoutManager, { currentPage -> viewmodel.getCharacterByPage(currentPage) })
+        rvCharacter.addOnScrollListener(onScrollListener)
+
         viewmodel.getCharacterByPage(1)
         attachObserver()
     }
@@ -51,7 +59,9 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner {
 
         viewmodel.characterResponse.observe(this, Observer {
             it?.let {
-                characterListAdapter.notifyDataSetChanged()
+                if (!it.isEmpty()) {
+                    characterListAdapter.notifyDataSetChanged()
+                }
             }
         })
 
@@ -64,11 +74,22 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner {
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
+    override fun onRefresh() {
+        onScrollListener.resetState()
+        viewmodel.clearCharacterList()
+        viewmodel.getCharacterByPage(1)
+    }
+
     fun showLoadingDialog(isLoading: Boolean) {
         if (isLoading) {
-            progressBar.visibility = View.VISIBLE
+            if (!swipeRefreshLayout.isRefreshing) {
+                progressBar.visibility = View.VISIBLE
+            }
         } else {
             progressBar.visibility = View.INVISIBLE
+            if (swipeRefreshLayout.isRefreshing) {
+                swipeRefreshLayout.isRefreshing = false
+            }
         }
     }
 
