@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
  * Created by oozou on 6/21/2017 AD.
  */
 
-class EndlessRecyclerOnScrollListener(private val mLinearLayoutManager: LinearLayoutManager, private val onLoadMore: (Int) -> Unit) : RecyclerView.OnScrollListener() {
+class EndlessRecyclerOnScrollListener(private val mLinearLayoutManager: LinearLayoutManager, private val onLoadMore: (Int) -> Unit, private val startPage: Int = 1) : RecyclerView.OnScrollListener() {
 
     private var previousTotal = 0 // The total number of items in the dataset after the last load
     private var loading = true // True if we are still waiting for the last set of data to load.
@@ -17,7 +17,7 @@ class EndlessRecyclerOnScrollListener(private val mLinearLayoutManager: LinearLa
     internal var visibleItemCount: Int = 0
     internal var totalItemCount: Int = 0
 
-    private var currentPage = 1
+    private var currentPage = startPage
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
@@ -45,7 +45,7 @@ class EndlessRecyclerOnScrollListener(private val mLinearLayoutManager: LinearLa
     }
 
     fun resetState() {
-        this.currentPage = 1
+        this.currentPage = startPage
         this.previousTotal = 0
         this.loading = true
     }
