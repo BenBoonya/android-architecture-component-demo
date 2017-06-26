@@ -42,6 +42,10 @@ class CharacterListViewModel : ViewModel() {
         }
     }
 
+    fun clearCharacterList() {
+        characterResponse.value = ArrayList<Character>()
+    }
+
     fun getCharacterByPage(page: Int) {
         isLoading.value = true
         repository.getCharacter(page)
