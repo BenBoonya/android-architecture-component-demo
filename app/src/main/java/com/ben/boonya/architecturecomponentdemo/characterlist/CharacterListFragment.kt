@@ -43,7 +43,10 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
         val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = linearLayoutManager
-        rvCharacter.onLoadMoreListener(startPage = 1) { currentPage -> viewmodel.getCharacterByPage(currentPage) }
+        rvCharacter.onLoadMoreListener(startPage = 1) {
+            currentPage ->
+            viewmodel.getCharacterByPage(currentPage)
+        }
 
         viewmodel.getCharacterByPage(1)
         attachObserver()
@@ -58,9 +61,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
 
         viewmodel.characterResponse.observe(this, Observer {
             it?.let {
-                if (!it.isEmpty()) {
-                    characterListAdapter.notifyDataSetChanged()
-                }
+                characterListAdapter.notifyDataSetChanged()
             }
         })
 
@@ -78,6 +79,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
         rvCharacter.resetLoadMoreState()
         viewmodel.clearCharacterList()
         viewmodel.getCharacterByPage(1)
+        viewmodel.nextPage = null
     }
 
     fun showLoadingDialog(isLoading: Boolean) {

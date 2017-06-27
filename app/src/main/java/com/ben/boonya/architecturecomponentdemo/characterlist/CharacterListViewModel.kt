@@ -9,6 +9,7 @@ import com.ben.boonya.architecturecomponentdemo.model.Character
  */
 class CharacterListViewModel : ViewModel() {
     private val repository = CharacterListRepository()
+    var nextPage: String? = null
 
     val isLoading = MediatorLiveData<Boolean>()
 
@@ -27,7 +28,7 @@ class CharacterListViewModel : ViewModel() {
                 val characterList = characterResponse.value
                 characterResponse.value = characterList?.plus(it) ?: it
             }
-
+            nextPage = it?.first?.next
         }
     }
 
@@ -45,6 +46,11 @@ class CharacterListViewModel : ViewModel() {
     fun clearCharacterList() {
         characterResponse.value = ArrayList<Character>()
     }
+
+
+    /**
+     * Adapter callback
+     */
 
     fun getCharacterByPage(page: Int) {
         isLoading.value = true
