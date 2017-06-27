@@ -12,7 +12,6 @@ class CharacterListViewModel : ViewModel() {
     var nextPage: String? = null
 
     val isLoading = MediatorLiveData<Boolean>()
-
     init {
         isLoading.addSource(repository.characterListResponse) {
             isLoading.value = false
@@ -20,7 +19,6 @@ class CharacterListViewModel : ViewModel() {
     }
 
     val characterResponse = MediatorLiveData<List<Character>>()
-
     init {
         characterResponse.addSource(repository.characterListResponse)
         {
@@ -33,7 +31,6 @@ class CharacterListViewModel : ViewModel() {
     }
 
     val throwable = MediatorLiveData<Throwable>()
-
     init {
         throwable.addSource(repository.characterListResponse)
         {
