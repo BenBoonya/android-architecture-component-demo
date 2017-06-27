@@ -21,6 +21,8 @@ class FilmListFragment : Fragment(), FilmListContract.MainView, LifecycleRegistr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewmodel = createViewModel()
+        viewmodel.getAllFilms()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,13 +33,10 @@ class FilmListFragment : Fragment(), FilmListContract.MainView, LifecycleRegistr
         filmListAdapter = FilmListAdapter(viewmodel)
         rvFilms.layoutManager = LinearLayoutManager(activity)
         rvFilms.adapter = filmListAdapter
-        viewmodel.getAllFilms()
         attachObserver()
     }
 
-    fun createViewModel(): FilmListViewModel {
-        return ViewModelProviders.of(this).get(FilmListViewModel::class.java)
-    }
+    fun createViewModel(): FilmListViewModel = ViewModelProviders.of(this).get(FilmListViewModel::class.java)
 
     fun attachObserver() {
         viewmodel.isLoading.observe(this, Observer<Boolean> {
