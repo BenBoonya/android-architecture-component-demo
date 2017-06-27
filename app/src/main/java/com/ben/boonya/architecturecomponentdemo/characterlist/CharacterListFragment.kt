@@ -43,7 +43,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
         val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = linearLayoutManager
-        rvCharacter.onLoadMoreListener(startPage = 1){ currentPage -> viewmodel.getCharacterByPage(currentPage) }
+        rvCharacter.onLoadMoreListener(startPage = 1) { currentPage -> viewmodel.getCharacterByPage(currentPage) }
 
         viewmodel.getCharacterByPage(1)
         attachObserver()
@@ -81,15 +81,8 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
     }
 
     fun showLoadingDialog(isLoading: Boolean) {
-        if (isLoading) {
-            if (!swipeRefreshLayout.isRefreshing) {
-                progressBar.visibility = View.VISIBLE
-            }
-        } else {
-            progressBar.visibility = View.INVISIBLE
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
+        if (!isLoading) {
+            swipeRefreshLayout.isRefreshing = false
         }
     }
 
