@@ -28,6 +28,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewmodel = createViewModel()
+        characterListAdapter = CharacterListAdapter(viewmodel)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,14 +36,11 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        characterListAdapter = CharacterListAdapter(viewmodel)
-
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary)
 
-        val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
-        rvCharacter.layoutManager = linearLayoutManager
+        rvCharacter.layoutManager = LinearLayoutManager(activity)
         rvCharacter.onLoadMoreListener(startPage = 1) {
             currentPage ->
             viewmodel.getCharacterByPage(currentPage)
