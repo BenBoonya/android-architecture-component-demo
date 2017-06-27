@@ -7,7 +7,6 @@ import kotlin.reflect.KProperty
 /**
  * Created by jutikornvarojananulux on 6/25/2017 AD.
  */
-val RecyclerView.visibleThreshold : Int get() = 5
 
 val LinearLayoutManager.firstVisibleItem : Int get() = findFirstVisibleItemPosition()
 
@@ -23,6 +22,8 @@ fun RecyclerView.onLoadMoreListener(startPage: Int = 1, onLoadMore: (Int) -> Uni
     this.loading = true
     this.layoutManager?.let {
         this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            val visibleThreshold: Int = 5
 
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
