@@ -12,8 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.ben.boonya.architecturecomponentdemo.EndlessRecyclerOnScrollListener
 import com.ben.boonya.architecturecomponentdemo.R
+import com.ben.boonya.architecturecomponentdemo.extensions.onLoadMoreListener
+import com.ben.boonya.architecturecomponentdemo.extensions.resetLoadMoreState
 import kotlinx.android.synthetic.main.fragment_character_list.*
 
 /**
@@ -22,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_character_list.*
 class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var viewmodel: CharacterListViewModel
     private lateinit var characterListAdapter: CharacterListAdapter
-    private lateinit var onScrollListener: EndlessRecyclerOnScrollListener
     private val registry = LifecycleRegistry(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +43,7 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
         val linearLayoutManager = LinearLayoutManager(activity)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = linearLayoutManager
-        onScrollListener = EndlessRecyclerOnScrollListener(linearLayoutManager, { currentPage -> viewmodel.getCharacterByPage(currentPage) })
-        rvCharacter.addOnScrollListener(onScrollListener)
+        rvCharacter.onLoadMoreListener(startPage = 1){ currentPage -> viewmodel.getCharacterByPage(currentPage) }
 
         viewmodel.getCharacterByPage(1)
         attachObserver()
@@ -74,8 +73,9 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
+
     override fun onRefresh() {
-        onScrollListener.resetState()
+        rvCharacter.resetLoadMoreState()
         viewmodel.clearCharacterList()
         viewmodel.getCharacterByPage(1)
     }
