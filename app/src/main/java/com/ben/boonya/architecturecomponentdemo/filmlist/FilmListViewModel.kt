@@ -1,21 +1,26 @@
 package com.ben.boonya.architecturecomponentdemo.filmlist
 
 
+import android.app.Application
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import com.ben.boonya.architecturecomponentdemo.base.BaseViewModel
 import com.ben.boonya.architecturecomponentdemo.model.Film
 import com.ben.boonya.architecturecomponentdemo.model.FilmList
 
-class FilmListViewModel : ViewModel(), FilmListContract.MainViewModel {
+class FilmListViewModel(application: Application) : BaseViewModel(application), FilmListContract.MainViewModel {
     private val repository = FilmListRepository()
 
     val filmDetailNavigation = MutableLiveData<Film>()
-    val isLoading = MediatorLiveData<Boolean>()
 
     init {
         isLoading.addSource(repository.filmListResponse) {
             isLoading.value = false
+        }
+        throwable.addSource(repository.filmListResponse) {
+            it?.second?.let {
+                throwable.value = it
+            }
         }
     }
 
@@ -31,24 +36,13 @@ class FilmListViewModel : ViewModel(), FilmListContract.MainViewModel {
         }
     }
 
-    val throwable = MediatorLiveData<Throwable>()
-
-    init {
-        throwable.addSource(repository.filmListResponse)
-        {
-            it?.second?.let {
-                throwable.value = it
-            }
-        }
-    }
-
     override fun getAllFilms() {
         isLoading.value = true
         repository.getAllFilms()
     }
 
     override fun onFilmItemClicked(id: Int) {
-         filmDetailNavigation.value = getFilmAt(id)
+        filmDetailNavigation.value = getFilmAt(id)
     }
 
     /**

@@ -1,24 +1,32 @@
 package com.ben.boonya.architecturecomponentdemo.characterlist
 
+import android.app.Application
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.ViewModel
+import com.ben.boonya.architecturecomponentdemo.base.BaseViewModel
 import com.ben.boonya.architecturecomponentdemo.model.Character
 
 /**
  * Created by oozou on 6/21/2017 AD.
  */
-class CharacterListViewModel : ViewModel() {
+class CharacterListViewModel(application: Application) : BaseViewModel(application) {
     private val repository = CharacterListRepository()
+
     var nextPage: String? = null
 
-    val isLoading = MediatorLiveData<Boolean>()
     init {
         isLoading.addSource(repository.characterListResponse) {
             isLoading.value = false
         }
+
+        throwable.addSource(repository.characterListResponse) {
+            it?.second?.let {
+                throwable.value = it
+            }
+        }
     }
 
     val characterResponse = MediatorLiveData<List<Character>>()
+
     init {
         characterResponse.addSource(repository.characterListResponse)
         {
@@ -30,20 +38,9 @@ class CharacterListViewModel : ViewModel() {
         }
     }
 
-    val throwable = MediatorLiveData<Throwable>()
-    init {
-        throwable.addSource(repository.characterListResponse)
-        {
-            it?.second?.let {
-                throwable.value = it
-            }
-        }
-    }
-
     fun clearCharacterList() {
         characterResponse.value = ArrayList<Character>()
     }
-
 
     /**
      * Adapter callback

@@ -2,26 +2,24 @@ package com.ben.boonya.architecturecomponentdemo.filmlist
 
 import android.arch.lifecycle.*
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ben.boonya.architecturecomponentdemo.R
+import com.ben.boonya.architecturecomponentdemo.base.BaseFragment
 import com.ben.boonya.architecturecomponentdemo.model.Film
 import kotlinx.android.synthetic.main.fragment_film_list.*
 
-class FilmListFragment : Fragment(), FilmListContract.MainView, LifecycleRegistryOwner {
+class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.MainView {
 
+    override val viewModelClass = FilmListViewModel::class.java
     private lateinit var filmListAdapter: FilmListAdapter
-    private lateinit var viewmodel: FilmListViewModel
     private val registry = LifecycleRegistry(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewmodel = createViewModel()
-        viewmodel.getAllFilms()
+        viewModel.getAllFilms()
 
     }
 
@@ -30,34 +28,26 @@ class FilmListFragment : Fragment(), FilmListContract.MainView, LifecycleRegistr
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        filmListAdapter = FilmListAdapter(viewmodel)
+        filmListAdapter = FilmListAdapter(viewModel)
         rvFilms.layoutManager = LinearLayoutManager(activity)
         rvFilms.adapter = filmListAdapter
         attachObserver()
     }
 
-    fun createViewModel(): FilmListViewModel = ViewModelProviders.of(this).get(FilmListViewModel::class.java)
-
     fun attachObserver() {
-        viewmodel.isLoading.observe(this, Observer<Boolean> {
+        viewModel.isLoading.observe(this, Observer<Boolean> {
             it?.let {
                 showLoadingDialog(it)
             }
         })
 
-        viewmodel.filmResponse.observe(this, Observer {
+        viewModel.filmResponse.observe(this, Observer {
             it?.let {
                 filmListAdapter.notifyDataSetChanged()
             }
         })
 
-        viewmodel.throwable.observe(this, Observer {
-            it?.message?.let {
-                showMessage(it)
-            }
-        })
-
-        viewmodel.filmDetailNavigation.observe(this, Observer {
+        viewModel.filmDetailNavigation.observe(this, Observer {
             it?.let {
                 navigateToFilmPage(it)
             }
@@ -72,10 +62,6 @@ class FilmListFragment : Fragment(), FilmListContract.MainView, LifecycleRegistr
         } else {
             progressBar.visibility = View.INVISIBLE
         }
-    }
-
-    override fun showMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showAllFilms(films: List<Film>) {

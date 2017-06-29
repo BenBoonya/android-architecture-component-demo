@@ -7,8 +7,6 @@ interface FilmListContract {
     interface MainView {
         fun showLoadingDialog(isLoading: Boolean)
 
-        fun showMessage(message: String)
-
         fun showAllFilms(films: List<Film>)
 
         fun navigateToFilmPage(film: Film)

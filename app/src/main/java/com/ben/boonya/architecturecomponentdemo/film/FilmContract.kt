@@ -4,8 +4,6 @@ interface FilmContract {
     interface FilmView {
         fun showLoadingDialog(isLoading: Boolean)
 
-        fun showMessage(message: String)
-
         fun showTitle(title: String)
 
         fun showReleaseDate(dateString: String)
