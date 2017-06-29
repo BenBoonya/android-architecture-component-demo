@@ -1,18 +1,15 @@
 package com.ben.boonya.architecturecomponentdemo.characterlist
 
 import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ben.boonya.architecturecomponentdemo.R
+import com.ben.boonya.architecturecomponentdemo.base.BaseFragment
 import com.ben.boonya.architecturecomponentdemo.extensions.onLoadMoreListener
 import com.ben.boonya.architecturecomponentdemo.extensions.resetLoadMoreState
 import kotlinx.android.synthetic.main.fragment_character_list.*
@@ -20,15 +17,15 @@ import kotlinx.android.synthetic.main.fragment_character_list.*
 /**
  * Created by oozou on 6/21/2017 AD.
  */
-class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLayout.OnRefreshListener {
-    private lateinit var viewmodel: CharacterListViewModel
+class CharacterListFragment : BaseFragment<CharacterListViewModel>(), SwipeRefreshLayout.OnRefreshListener {
+
+    override val viewModelClass = CharacterListViewModel::class.java
     private lateinit var characterListAdapter: CharacterListAdapter
     private val registry = LifecycleRegistry(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewmodel = createViewModel()
-        viewmodel.getCharacterByPage(1)
+        viewModel.getCharacterByPage(1)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,34 +36,27 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary)
 
-        characterListAdapter = CharacterListAdapter(viewmodel)
+        characterListAdapter = CharacterListAdapter(viewModel)
         rvCharacter.adapter = characterListAdapter
         rvCharacter.layoutManager = LinearLayoutManager(activity)
         rvCharacter.onLoadMoreListener(startPage = 1) {
             currentPage ->
-            viewmodel.getCharacterByPage(currentPage)
+            viewModel.getCharacterByPage(currentPage)
         }
-
 
         attachObserver()
     }
 
     fun attachObserver() {
-        viewmodel.isLoading.observe(this, Observer<Boolean> {
+        viewModel.isLoading.observe(this, Observer<Boolean> {
             it?.let {
                 showLoadingDialog(it)
             }
         })
 
-        viewmodel.characterResponse.observe(this, Observer {
+        viewModel.characterResponse.observe(this, Observer {
             it?.let {
                 characterListAdapter.notifyDataSetChanged()
-            }
-        })
-
-        viewmodel.throwable.observe(this, Observer {
-            it?.message?.let {
-                showMessage(it)
             }
         })
     }
@@ -76,9 +66,9 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
 
     override fun onRefresh() {
         rvCharacter.resetLoadMoreState()
-        viewmodel.clearCharacterList()
-        viewmodel.getCharacterByPage(1)
-        viewmodel.nextPage = null
+        viewModel.clearCharacterList()
+        viewModel.getCharacterByPage(1)
+        viewModel.nextPage = null
     }
 
     fun showLoadingDialog(isLoading: Boolean) {
@@ -86,12 +76,6 @@ class CharacterListFragment : Fragment(), LifecycleRegistryOwner, SwipeRefreshLa
             swipeRefreshLayout.isRefreshing = false
         }
     }
-
-    fun showMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun createViewModel() = ViewModelProviders.of(this).get(CharacterListViewModel::class.java)
 
     companion object {
         fun newInstance(): CharacterListFragment {
