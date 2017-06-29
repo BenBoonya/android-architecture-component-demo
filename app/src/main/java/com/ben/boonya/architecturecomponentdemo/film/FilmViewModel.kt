@@ -1,19 +1,26 @@
 package com.ben.boonya.architecturecomponentdemo.film
 
+import android.app.Application
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.ben.boonya.architecturecomponentdemo.base.BaseViewModel
 import com.ben.boonya.architecturecomponentdemo.model.Film
 
-class FilmViewModel : ViewModel(), FilmContract.FilmPresenter {
+class FilmViewModel(application: Application) : BaseViewModel(application), FilmContract.FilmPresenter {
 
     private val repository = FilmRepository()
-
-    val isLoading = MediatorLiveData<Boolean>()
 
     init {
         isLoading.addSource(repository.filmResponse) {
             isLoading.value = false
+        }
+
+        throwable.addSource(repository.filmResponse)
+        {
+            it?.let {
+                throwable.value = it.second
+            }
         }
     }
 
@@ -24,17 +31,6 @@ class FilmViewModel : ViewModel(), FilmContract.FilmPresenter {
         {
             it?.let {
                 filmResponse.value = it.first
-            }
-        }
-    }
-
-    val throwable = MediatorLiveData<Throwable>()
-
-    init {
-        throwable.addSource(repository.filmResponse)
-        {
-            it?.let {
-                throwable.value = it.second
             }
         }
     }
