@@ -48,12 +48,6 @@ class CharacterListFragment : BaseFragment<CharacterListViewModel>(), SwipeRefre
     }
 
     fun attachObserver() {
-        viewModel.isLoading.observe(this, Observer<Boolean> {
-            it?.let {
-                showLoadingDialog(it)
-            }
-        })
-
         viewModel.characterResponse.observe(this, Observer {
             it?.let {
                 characterListAdapter.notifyDataSetChanged()
@@ -71,7 +65,7 @@ class CharacterListFragment : BaseFragment<CharacterListViewModel>(), SwipeRefre
         viewModel.nextPage = null
     }
 
-    fun showLoadingDialog(isLoading: Boolean) {
+    override fun showLoadingView(isLoading: Boolean) {
         if (!isLoading) {
             swipeRefreshLayout.isRefreshing = false
         }

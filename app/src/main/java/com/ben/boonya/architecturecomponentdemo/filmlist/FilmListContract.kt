@@ -5,8 +5,6 @@ import com.ben.boonya.architecturecomponentdemo.model.Film
 
 interface FilmListContract {
     interface MainView {
-        fun showLoadingDialog(isLoading: Boolean)
-
         fun showAllFilms(films: List<Film>)
 
         fun navigateToFilmPage(film: Film)

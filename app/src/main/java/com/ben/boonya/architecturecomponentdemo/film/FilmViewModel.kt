@@ -11,32 +11,15 @@ class FilmViewModel(application: Application) : BaseViewModel(application), Film
 
     private val repository = FilmRepository()
 
-    init {
-        isLoading.addSource(repository.filmResponse) {
-            isLoading.value = false
-        }
-
-        throwable.addSource(repository.filmResponse)
-        {
-            it?.let {
-                throwable.value = it.second
-            }
-        }
-    }
-
-    val filmResponse = MediatorLiveData<Film>()
-
-    init {
-        filmResponse.addSource(repository.filmResponse)
-        {
-            it?.let {
-                filmResponse.value = it.first
-            }
-        }
-    }
+    val filmResponse = MutableLiveData<Film>()
 
     override fun getFilm(id: Long) {
         isLoading.value = true
-        repository.getFilmById(id)
+        repository.getFilmById(id,
+                {
+                    filmResponse.value = it
+                    isLoading.value = false
+                },
+                this::handleError)
     }
 }

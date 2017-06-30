@@ -22,15 +22,36 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), LifecycleRegistryOw
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(viewModelClass)
+        attachObserver()
+    }
 
-        viewModel.throwable.observe(this, Observer {
+    private fun attachObserver() {
+        viewModel.apiError.observe(this, Observer {
+            it?.first?.let {
+                showErrorMessage(it.toString())
+                return@Observer
+            }
+            it?.second?.let {
+                showErrorMessage()
+                return@Observer
+            }
+            handleNoConnection()
+        })
+
+        viewModel.isLoading.observe(this, Observer<Boolean> {
             it?.let {
-                showErrorMessage(it)
+                showLoadingView(it)
             }
         })
     }
 
-    protected fun showErrorMessage(throwable: Throwable) {
-        Toast.makeText(activity, throwable.message, Toast.LENGTH_SHORT).show()
+    protected fun showErrorMessage(message: String = "Something went wrong please try again later") {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
+
+    protected fun handleNoConnection() {
+        Toast.makeText(activity, "No connection", Toast.LENGTH_SHORT).show()
+    }
+
+    abstract fun showLoadingView(isLoading: Boolean)
 }

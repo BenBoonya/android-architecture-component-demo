@@ -13,32 +13,16 @@ class FilmListViewModel(application: Application) : BaseViewModel(application), 
 
     val filmDetailNavigation = MutableLiveData<Film>()
 
-    init {
-        isLoading.addSource(repository.filmListResponse) {
-            isLoading.value = false
-        }
-        throwable.addSource(repository.filmListResponse) {
-            it?.second?.let {
-                throwable.value = it
-            }
-        }
-    }
-
-    val filmResponse = MediatorLiveData<FilmList>()
-
-    init {
-        filmResponse.addSource(repository.filmListResponse)
-        {
-            it?.first?.let {
-                filmResponse.value = it
-            }
-
-        }
-    }
+    val filmResponse = MutableLiveData<FilmList>()
 
     override fun getAllFilms() {
         isLoading.value = true
-        repository.getAllFilms()
+        repository.getAllFilms(
+                {
+                    isLoading.value = false
+                    filmResponse.value = it
+                }
+                , this::handleError)
     }
 
     override fun onFilmItemClicked(id: Int) {

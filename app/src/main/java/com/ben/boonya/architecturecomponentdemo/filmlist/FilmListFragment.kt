@@ -20,7 +20,6 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getAllFilms()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,12 +34,6 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
     }
 
     fun attachObserver() {
-        viewModel.isLoading.observe(this, Observer<Boolean> {
-            it?.let {
-                showLoadingDialog(it)
-            }
-        })
-
         viewModel.filmResponse.observe(this, Observer {
             it?.let {
                 filmListAdapter.notifyDataSetChanged()
@@ -56,7 +49,7 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
-    override fun showLoadingDialog(isLoading: Boolean) {
+    override fun showLoadingView(isLoading: Boolean) {
         if (isLoading) {
             progressBar.visibility = View.VISIBLE
         } else {

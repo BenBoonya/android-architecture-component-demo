@@ -31,12 +31,6 @@ class FilmDetailFragment : BaseFragment<FilmViewModel>(), FilmContract.FilmView 
     }
 
     fun attachObserver() {
-        viewModel.isLoading.observe(this, Observer<Boolean> {
-            it?.let {
-                showLoadingDialog(it)
-            }
-        })
-
         viewModel.filmResponse.observe(this, Observer<Film> {
             it?.let {
                 showTitle(it.title)
@@ -47,7 +41,7 @@ class FilmDetailFragment : BaseFragment<FilmViewModel>(), FilmContract.FilmView 
         })
     }
 
-    override fun showLoadingDialog(isLoading: Boolean) {
+    override fun showLoadingView(isLoading: Boolean) {
         if (isLoading) progressBar.visibility = View.VISIBLE else progressBar.visibility = View.GONE
     }
 
