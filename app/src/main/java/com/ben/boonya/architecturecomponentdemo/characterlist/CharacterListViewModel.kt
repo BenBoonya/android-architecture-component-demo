@@ -1,10 +1,9 @@
 package com.ben.boonya.architecturecomponentdemo.characterlist
 
 import android.app.Application
-import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
-import com.ben.boonya.architecturecomponentdemo.base.BaseViewModel
-import com.ben.boonya.architecturecomponentdemo.model.Character
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseViewModel
+import com.ben.boonya.architecturecomponentdemo.common.model.Character
 
 /**
  * Created by oozou on 6/21/2017 AD.

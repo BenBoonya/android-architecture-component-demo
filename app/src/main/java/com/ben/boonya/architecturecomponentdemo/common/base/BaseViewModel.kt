@@ -1,10 +1,9 @@
-package com.ben.boonya.architecturecomponentdemo.base
+package com.ben.boonya.architecturecomponentdemo.common.base
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
-import com.ben.boonya.architecturecomponentdemo.common.ErrorResponse
+import com.ben.boonya.architecturecomponentdemo.common.model.ErrorResponse
 
 /**
  * Created by oozou on 6/28/2017 AD.

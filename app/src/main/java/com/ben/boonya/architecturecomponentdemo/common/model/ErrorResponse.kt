@@ -1,4 +1,4 @@
-package com.ben.boonya.architecturecomponentdemo.common
+package com.ben.boonya.architecturecomponentdemo.common.model
 
 import android.os.Parcel
 import android.os.Parcelable

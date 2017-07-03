@@ -1,9 +1,8 @@
-package com.ben.boonya.architecturecomponentdemo.base
+package com.ben.boonya.architecturecomponentdemo.common.base
 
-import android.arch.lifecycle.MutableLiveData
 import android.text.TextUtils
-import com.ben.boonya.architecturecomponentdemo.common.ErrorResponse
-import com.ben.boonya.architecturecomponentdemo.model.Apis
+import com.ben.boonya.architecturecomponentdemo.common.model.ErrorResponse
+import com.ben.boonya.architecturecomponentdemo.common.api.Apis
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback

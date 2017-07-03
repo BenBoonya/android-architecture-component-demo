@@ -1,4 +1,4 @@
-package com.ben.boonya.architecturecomponentdemo.base
+package com.ben.boonya.architecturecomponentdemo.common.base
 
 import android.arch.lifecycle.*
 import android.os.Bundle

@@ -2,11 +2,10 @@ package com.ben.boonya.architecturecomponentdemo.filmlist
 
 
 import android.app.Application
-import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
-import com.ben.boonya.architecturecomponentdemo.base.BaseViewModel
-import com.ben.boonya.architecturecomponentdemo.model.Film
-import com.ben.boonya.architecturecomponentdemo.model.FilmList
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseViewModel
+import com.ben.boonya.architecturecomponentdemo.common.model.Film
+import com.ben.boonya.architecturecomponentdemo.common.model.FilmList
 
 class FilmListViewModel(application: Application) : BaseViewModel(application), FilmListContract.MainViewModel {
     private val repository = FilmListRepository()

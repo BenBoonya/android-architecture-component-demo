@@ -1,6 +1,6 @@
 package com.ben.boonya.architecturecomponentdemo.filmlist
 
-import com.ben.boonya.architecturecomponentdemo.model.Film
+import com.ben.boonya.architecturecomponentdemo.common.model.Film
 
 
 interface FilmListContract {

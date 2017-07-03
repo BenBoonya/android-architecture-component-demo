@@ -1,5 +1,8 @@
-package com.ben.boonya.architecturecomponentdemo.model
+package com.ben.boonya.architecturecomponentdemo.common.api
 
+import com.ben.boonya.architecturecomponentdemo.common.model.CharacterList
+import com.ben.boonya.architecturecomponentdemo.common.model.Film
+import com.ben.boonya.architecturecomponentdemo.common.model.FilmList
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

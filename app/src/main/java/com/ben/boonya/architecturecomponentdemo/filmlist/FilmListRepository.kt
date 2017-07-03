@@ -1,14 +1,8 @@
 package com.ben.boonya.architecturecomponentdemo.filmlist
 
-import android.arch.lifecycle.MutableLiveData
-import com.ben.boonya.architecturecomponentdemo.base.BaseRepository
-import com.ben.boonya.architecturecomponentdemo.common.ErrorResponse
-import com.ben.boonya.architecturecomponentdemo.model.Apis
-import com.ben.boonya.architecturecomponentdemo.model.FilmList
-import com.ben.boonya.architecturecomponentdemo.model.StarWarsApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseRepository
+import com.ben.boonya.architecturecomponentdemo.common.model.ErrorResponse
+import com.ben.boonya.architecturecomponentdemo.common.model.FilmList
 
 /**
  * Created by Boonya Kitpitak on 6/16/17.
