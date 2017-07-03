@@ -14,9 +14,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     val apiError = MutableLiveData<Pair<ErrorResponse?, Int?>>()
 
     fun handleError(errorResponse: ErrorResponse?, code: Int?) {
-        kotlin.run {
-            isLoading.value = false
-            apiError.value = Pair(errorResponse, code)
-        }
+        isLoading.value = false
+        apiError.value = Pair(errorResponse, code)
     }
 }
