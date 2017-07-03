@@ -1,4 +1,4 @@
-package com.ben.boonya.architecturecomponentdemo.model
+package com.ben.boonya.architecturecomponentdemo.common.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ben.boonya.architecturecomponentdemo.R
-import com.ben.boonya.architecturecomponentdemo.base.BaseFragment
-import com.ben.boonya.architecturecomponentdemo.model.Film
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseFragment
+import com.ben.boonya.architecturecomponentdemo.common.model.Film
 import kotlinx.android.synthetic.main.fragment_film_list.*
 
 class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.MainView {
@@ -20,7 +20,6 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getAllFilms()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,12 +34,6 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
     }
 
     fun attachObserver() {
-        viewModel.isLoading.observe(this, Observer<Boolean> {
-            it?.let {
-                showLoadingDialog(it)
-            }
-        })
-
         viewModel.filmResponse.observe(this, Observer {
             it?.let {
                 filmListAdapter.notifyDataSetChanged()
@@ -56,7 +49,7 @@ class FilmListFragment : BaseFragment<FilmListViewModel>(), FilmListContract.Mai
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
-    override fun showLoadingDialog(isLoading: Boolean) {
+    override fun showLoadingView(isLoading: Boolean) {
         if (isLoading) {
             progressBar.visibility = View.VISIBLE
         } else {

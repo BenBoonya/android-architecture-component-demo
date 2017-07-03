@@ -1,4 +1,4 @@
-package com.ben.boonya.architecturecomponentdemo.model
+package com.ben.boonya.architecturecomponentdemo.common.api
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit

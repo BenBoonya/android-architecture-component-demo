@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ben.boonya.architecturecomponentdemo.R
-import com.ben.boonya.architecturecomponentdemo.base.BaseFragment
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseFragment
 import com.ben.boonya.architecturecomponentdemo.extensions.onLoadMoreListener
 import com.ben.boonya.architecturecomponentdemo.extensions.resetLoadMoreState
 import kotlinx.android.synthetic.main.fragment_character_list.*
@@ -48,12 +48,6 @@ class CharacterListFragment : BaseFragment<CharacterListViewModel>(), SwipeRefre
     }
 
     fun attachObserver() {
-        viewModel.isLoading.observe(this, Observer<Boolean> {
-            it?.let {
-                showLoadingDialog(it)
-            }
-        })
-
         viewModel.characterResponse.observe(this, Observer {
             it?.let {
                 characterListAdapter.notifyDataSetChanged()
@@ -71,7 +65,7 @@ class CharacterListFragment : BaseFragment<CharacterListViewModel>(), SwipeRefre
         viewModel.nextPage = null
     }
 
-    fun showLoadingDialog(isLoading: Boolean) {
+    override fun showLoadingView(isLoading: Boolean) {
         if (!isLoading) {
             swipeRefreshLayout.isRefreshing = false
         }

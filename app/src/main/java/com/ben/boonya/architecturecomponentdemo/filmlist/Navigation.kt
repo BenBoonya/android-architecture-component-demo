@@ -3,7 +3,7 @@ package com.ben.boonya.architecturecomponentdemo.filmlist
 import android.content.Intent
 import com.ben.boonya.architecturecomponentdemo.Constants
 import com.ben.boonya.architecturecomponentdemo.film.FilmDetailActivity
-import com.ben.boonya.architecturecomponentdemo.model.Film
+import com.ben.boonya.architecturecomponentdemo.common.model.Film
 
 /**
  * Created by oozou on 6/19/2017 AD.

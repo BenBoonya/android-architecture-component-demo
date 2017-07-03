@@ -2,7 +2,6 @@ package com.ben.boonya.architecturecomponentdemo.film
 
 interface FilmContract {
     interface FilmView {
-        fun showLoadingDialog(isLoading: Boolean)
 
         fun showTitle(title: String)
 

@@ -1,32 +1,15 @@
 package com.ben.boonya.architecturecomponentdemo.filmlist
 
-import android.arch.lifecycle.MutableLiveData
-import com.ben.boonya.architecturecomponentdemo.model.Apis
-import com.ben.boonya.architecturecomponentdemo.model.FilmList
-import com.ben.boonya.architecturecomponentdemo.model.StarWarsApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.ben.boonya.architecturecomponentdemo.common.base.BaseRepository
+import com.ben.boonya.architecturecomponentdemo.common.model.ErrorResponse
+import com.ben.boonya.architecturecomponentdemo.common.model.FilmList
 
 /**
  * Created by Boonya Kitpitak on 6/16/17.
  */
-class FilmListRepository {
+class FilmListRepository : BaseRepository() {
 
-    val filmListResponse = MutableLiveData<Pair<FilmList?, Throwable?>>()
-
-    private val starWarsApi: StarWarsApi = Apis.getStarWarApi()
-    fun getAllFilms() {
-        starWarsApi.getAllFilms().enqueue(object : Callback<FilmList?> {
-            override fun onResponse(call: Call<FilmList?>, response: Response<FilmList?>) {
-                filmListResponse.value = Pair(response.body(), null)
-            }
-
-            override fun onFailure(call: Call<FilmList?>, t: Throwable) {
-                filmListResponse.value = Pair(null, t)
-            }
-        })
+    fun getAllFilms(successHandler: (FilmList?) -> Unit, failureHandler: (ErrorResponse?, Int?) -> Unit) {
+        makeRequest(apiService.getAllFilms(), successHandler, failureHandler)
     }
-
-
 }
