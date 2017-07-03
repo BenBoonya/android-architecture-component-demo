@@ -9,37 +9,23 @@ import android.os.Parcelable
 
  * @author Jutikorn Varojananulux <jutikorn.v></jutikorn.v>@gmail.com>
  */
-class Error : Parcelable {
-
-    var type = "N/A"
-    var message = "N/A"
-
-    override fun describeContents(): Int {
-        return 0
+data class Error(val type: String = "N/A", val message: String = "N/A") : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<Error> = object : Parcelable.Creator<Error> {
+            override fun createFromParcel(source: Parcel): Error = Error(source)
+            override fun newArray(size: Int): Array<Error?> = arrayOfNulls(size)
+        }
     }
+
+    constructor(source: Parcel) : this(
+            source.readString(),
+            source.readString()
+    )
+
+    override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(this.type)
-        dest.writeString(this.message)
-    }
-
-    constructor() {}
-
-    protected constructor(`in`: Parcel) {
-        this.type = `in`.readString()
-        this.message = `in`.readString()
-    }
-
-    companion object {
-
-        val CREATOR: Parcelable.Creator<Error> = object : Parcelable.Creator<Error> {
-            override fun createFromParcel(source: Parcel): Error {
-                return Error(source)
-            }
-
-            override fun newArray(size: Int): Array<Error?> {
-                return arrayOfNulls(size)
-            }
-        }
+        dest.writeString(type)
+        dest.writeString(message)
     }
 }

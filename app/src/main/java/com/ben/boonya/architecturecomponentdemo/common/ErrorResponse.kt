@@ -10,15 +10,7 @@ import android.os.Parcelable
 
  * @author Jutikorn Varojananulux <jutikorn.v></jutikorn.v>@gmail.com>
  */
-class ErrorResponse : Parcelable {
-    var error: Error? = null
-
-    constructor() {}
-
-    constructor(error: Error?) {
-        this.error = error
-    }
-
+data class ErrorResponse(val error: Error?) : Parcelable {
     override fun toString(): String {
         error?.message?.let {
             return it
@@ -34,9 +26,12 @@ class ErrorResponse : Parcelable {
     }
 
     constructor(source: Parcel) : this(
+            source.readParcelable<Error>(Error::class.java.classLoader)
     )
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {}
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeParcelable(error, 0)
+    }
 }
