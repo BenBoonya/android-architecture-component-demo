@@ -1,9 +1,8 @@
 package com.ben.boonya.architecturecomponentdemo.common.base
 
-import android.text.TextUtils
 import com.ben.boonya.architecturecomponentdemo.common.model.ErrorResponse
 import com.ben.boonya.architecturecomponentdemo.common.api.Apis
-import com.google.gson.Gson
+import com.ben.boonya.architecturecomponentdemo.extensions.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +21,7 @@ open class BaseRepository {
                 response?.let {
                     when (response.isSuccessful) {
                         true -> successHandler(it.body())
-                        false -> failureHandler(getError(response), response.code())
+                        false -> failureHandler(response.getError(), response.code())
                     }
                 }
             }
@@ -34,17 +33,5 @@ open class BaseRepository {
                 }
             }
         })
-    }
-
-    protected fun <T> getError(response: Response<T>): ErrorResponse? {
-        try {
-            val errorBody = response.errorBody()?.string()
-            if (!TextUtils.isEmpty(errorBody)) {
-                return Gson().fromJson(errorBody, ErrorResponse::class.java)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-        return null
     }
 }
