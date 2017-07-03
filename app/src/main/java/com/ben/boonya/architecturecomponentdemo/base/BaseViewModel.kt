@@ -11,7 +11,7 @@ import com.ben.boonya.architecturecomponentdemo.common.ErrorResponse
  */
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
-    val isLoading = MediatorLiveData<Boolean>()
+    val isLoading = MutableLiveData<Boolean>()
     val apiError = MutableLiveData<Pair<ErrorResponse?, Int?>>()
 
     fun handleError(errorResponse: ErrorResponse?, code: Int?) {

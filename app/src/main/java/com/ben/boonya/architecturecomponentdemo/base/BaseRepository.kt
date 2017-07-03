@@ -39,7 +39,7 @@ open class BaseRepository {
 
     protected fun <T> getError(response: Response<T>): ErrorResponse? {
         try {
-            val errorBody = response.errorBody().string()
+            val errorBody = response.errorBody()?.string()
             if (!TextUtils.isEmpty(errorBody)) {
                 return Gson().fromJson(errorBody, ErrorResponse::class.java)
             }
